@@ -36,7 +36,7 @@ jobs:
 
             const url = 'https://www.observatorioremoto.com/emadato/IPcam3.jpg'; // Replace with the URL of the image
             const date = new Date().toISOString().replace(/[:\-]/g, '').split('.')[0]; // Format: YYYYMMDDTHHMMSS
-            const filename = `photos/photo_${date}.jpg`;
+            const filename = 'photos/photo_${date}.jpg';
 
             // Fetch the image
             axios.get(url, { responseType: 'arraybuffer' })
