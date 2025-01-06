@@ -1,0 +1,49 @@
+name: Sort and Create File
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  sort-files:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Step 1: Checkout the repository
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      # Step 2: Sort files by creation date and generate HTML content
+      - name: Sort files and create HTML content
+        run: |
+          node -e "
+          const fs = require('fs');
+          const path = require('path');
+
+          const directoryPath = './images';
+          const outputFilePath = './sorted_files.html';
+
+          // Read and sort files by creation date
+          const sortedFiles = fs.readdirSync(directoryPath)
+            .map(file => {
+              const filePath = path.join(directoryPath, file);
+              return { file, createdAt: fs.statSync(filePath).birthtime };
+            })
+            .sort((a, b) => a.createdAt - b.createdAt)
+            .map(item => item.file);
+
+          // Generate HTML content
+          const htmlContent = sortedFiles.map(file => `<img src='${directoryPath}/${file}' >`).join('\\n');
+
+          // Write to output file
+          fs.writeFileSync(outputFilePath, htmlContent);
+          console.log('Sorted file list saved to sorted_files.html');
+          "
+      
+      # Step 3: Commit and push the generated file
+      - name: Commit and push changes
+        uses: stefanzweifel/git-auto-commit-action@v4
+        with:
+          commit_message: "Add sorted_files.html with sorted image list"
