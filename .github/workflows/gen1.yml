@@ -35,7 +35,7 @@ jobs:
             .map(item => item.file);
 
           // Generate HTML content
-          const htmlContent = sortedFiles.map(file => `<img src='${directoryPath}/${file}' >`).join('\\n');
+          const htmlContent = sortedFiles.map(file => '<img src="${directoryPath}/${file}" >').join('\\n');
 
           // Write to output file
           fs.writeFileSync(outputFilePath, htmlContent);
