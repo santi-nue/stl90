@@ -1,0 +1,60 @@
+name: Scrape and Save Photo
+
+on:
+  schedule:
+    - cron: '0 */3 * * *'  # Runs every 3 hours
+  workflow_dispatch:  # Allows manual trigger
+
+jobs:
+  scrape-photo:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Checkout the repository
+      - name: Checkout Repository.    
+        uses: actions/checkout@v2
+
+      # Set up Node.js environment (you can also use Python if preferred)
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '14'  # You can choose your desired version of Node.js
+
+      # Install dependencies (e.g., axios for HTTP requests, fs for file operations)
+      - name: Install dependencies
+        run: |
+          npm init -y
+          npm install axios fs
+
+      # Run the script to fetch and save the photo
+      - name: Fetch and Save Photo
+        run: |
+          node -e "
+            const axios = require('axios');
+            const fs = require('fs');
+            const path = require('path');
+
+            const url = 'https://www.observatorioremoto.com/emadato/IPcam3.jpg'; // Replace with the URL of the image
+            const date = new Date().toISOString().replace(/[:\-]/g, '').split('.')[0]; // Format: YYYYMMDDTHHMMSS
+            const filename = `photos/photo_${date}.jpg`;
+
+            // Fetch the image
+            axios.get(url, { responseType: 'arraybuffer' })
+              .then(response => {
+                // Save the photo to the repository
+                fs.writeFileSync(path.join(process.cwd(), filename), response.data);
+              })
+              .catch(error => {
+                console.error('Error fetching image:', error);
+                process.exit(1);
+              );
+          "
+
+      # Commit the image to the repository
+      - name: Commit the image to the repository
+        run: |
+          git config –global user.name "github-actions"
+          git config –global user.email "github-actions@github.com"
+          git add photos/*
+          git commit -m "Add photo taken at(date)"
+          git push
