@@ -56,9 +56,10 @@
     </div>
   </div>
 <script>
+document.addEventListener('DOMContentLoaded', function () {
   const deck = new Reveal();
   deck.initialize();
   setInterval(() => { deck.next(); }, 1000);
-</script>
+  }); </script>
 </body>
 </html>
