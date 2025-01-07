@@ -48,10 +48,14 @@ jobs:
 
         # Add Reveal.js initialization script
         echo "<script>" >> timelapse.html
+        
+        echo "document.addEventListener('DOMContentLoaded', function () {" >> timelapse.html
+      
+
         echo "  const deck = new Reveal();" >> timelapse.html
         echo "  deck.initialize();" >> timelapse.html
         echo "  setInterval(() => { deck.next(); }, 1000);" >> timelapse.html
-        echo "</script>" >> timelapse.html
+        echo "  }); </script>" >> timelapse.html
 
         echo "</body>" >> timelapse.html
         echo "</html>" >> timelapse.html
