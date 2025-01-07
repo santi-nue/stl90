@@ -30,9 +30,9 @@ jobs:
         echo "  <meta charset=\"UTF-8\">" >> timelapse.html
         echo "  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">" >> timelapse.html
         echo "  <title>Timelapse with Reveal.js</title>" >> timelapse.html
-        echo "  <link rel=\"stylesheet\" href=\"https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.3.1/css/reveal.css\">" >> timelapse.html
-        echo "  <link rel=\"stylesheet\" href=\"https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.3.1/css/theme/white.css\">" >> timelapse.html
-        echo "  <script src=\"https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.3.1/js/reveal.js\"></script>" >> timelapse.html      
+        echo "  <link rel=\"stylesheet\" href=\"https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.3.1/reveal.css\">" >> timelapse.html
+        echo "  <link rel=\"stylesheet\" href=\"https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.3.1/theme/white.css\">" >> timelapse.html
+        echo "  <script src=\"https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.3.1/reveal.js\"></script>" >> timelapse.html      
         echo "</head>" >> timelapse.html
         echo "<body>" >> timelapse.html
         echo "  <div class=\"reveal\">" >> timelapse.html
