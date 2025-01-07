@@ -1,9 +1,7 @@
 name: Sort and Create File
 
 on:
-  push:
-    branches:
-      - main
+
   workflow_dispatch:
 
 jobs:
