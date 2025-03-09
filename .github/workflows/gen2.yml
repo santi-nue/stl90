@@ -44,10 +44,11 @@ jobs:
               document.addEventListener('DOMContentLoaded', function () {
                 const slidesContainer = document.getElementById('slides-container');
                 const images = '$(ls images/*.jpg | tr '\n' ',')'.split(',');
-                images.forEach(img => {
+                const updatedImages = images.map(img => img.substring(13));    
+                updatedImages.forEach(img => {
                   const section = document.createElement('section');
                   const imageElement = document.createElement('img');
-                  imageElement.src = img;
+                  imageElement.src = 'images/image_' + img;
                   imageElement.alt = 'Image';
                   section.appendChild(imageElement);
                   slidesContainer.appendChild(section);
