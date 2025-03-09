@@ -23,45 +23,47 @@ jobs:
     - name: List JPG files in the images folder
       run: ls -l images/*.jpg  # List all jpg files in the 'images' folder
 
+
+
     - name: Generate HTML for Reveal.js Timelapse
       run: |
-        # Create the HTML file with Reveal.js structure
-        echo "<!DOCTYPE html>" > timelapse.html
-        echo "<html lang=\"en\">" >> timelapse.html
-        echo "<head>" >> timelapse.html
-        echo "  <meta charset=\"UTF-8\">" >> timelapse.html
-        echo "  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">" >> timelapse.html
-        echo "  <title>Timelapse with Reveal.js</title>" >> timelapse.html
-        echo "  <link rel=\"stylesheet\" href=\"https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.3.1/reveal.css\">" >> timelapse.html
-        echo "  <link rel=\"stylesheet\" href=\"https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.3.1/theme/white.css\">" >> timelapse.html
-        echo "  <script src=\"https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.3.1/reveal.js\"></script>" >> timelapse.html      
-        echo "</head>" >> timelapse.html
-        echo "<body>" >> timelapse.html
-        echo "  <div class=\"reveal\">" >> timelapse.html
-        echo "    <div class=\"slides\">" >> timelapse.html
+        echo "<!DOCTYPE html>
+        <html lang='en'>
+        <head>
+          <meta charset='UTF-8'>
+          <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+          <title>Timelapse with Reveal.js</title>
+          <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.3.1/reveal.css'>
+          <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.3.1/theme/white.css'>
+          <script src='https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.3.1/reveal.js'></script>
+        </head>
+        <body>
+          <div class='reveal'>
+            <div class='slides' id='slides-container'></div>
+            <script>
+              document.addEventListener('DOMContentLoaded', function () {
+                const slidesContainer = document.getElementById('slides-container');
+                const images = ['$(ls images/*.jpg)'];
+                images.forEach(img => {
+                  const section = document.createElement('section');
+                  const imageElement = document.createElement('img');
+                  imageElement.src = img;
+                  imageElement.alt = 'Image';
+                  section.appendChild(imageElement);
+                  slidesContainer.appendChild(section);
+                });
+                const deck = new Reveal();
+                deck.initialize();
+                setInterval(() => { deck.next(); }, 2000);
+              });
+            </script>
+          </div>
+        </body>
+        </html>" > timelapse.html
 
-        # Loop over all jpg files and create a slide for each
-        for img in images/*.jpg; do
-          echo "      <section><img src=\"$img\" alt=\"Image\"></section>" >> timelapse.html
-        done
-
-        echo "    </div>" >> timelapse.html
-        echo "  </div>" >> timelapse.html
-
-        # Add Reveal.js initialization script
-        echo "<script>" >> timelapse.html
-        
-        echo "document.addEventListener('DOMContentLoaded', function () {" >> timelapse.html
-      
-
-        echo "  const deck = new Reveal();" >> timelapse.html
-        echo "  deck.initialize();" >> timelapse.html
-        echo "  setInterval(() => { deck.next(); }, 2000);" >> timelapse.html
-        echo "  }); </script>" >> timelapse.html
-
-        echo "</body>" >> timelapse.html
-        echo "</html>" >> timelapse.html
         mv ./timelapse.html ./index.html
+
+
         
       # Step 3: Commit and push the generated file
     - name: Commit and push changes
