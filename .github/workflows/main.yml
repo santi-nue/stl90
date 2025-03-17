@@ -17,7 +17,28 @@ jobs:
       - name: Download image from URL and rename
         run: |
           TIMESTAMP=$(date +"%Y-%m-%d_%H-%M-%S")
-          curl -o "image_${TIMESTAMP}.jpg" https://www.observatorioremoto.com/emadato/IPcam3.jpg
+          MAX_RETRIES=5
+          RETRY_COUNT=0
+          SUCCESS=false
+
+          while [ $RETRY_COUNT -lt $MAX_RETRIES ]; do
+            curl -o "image_${TIMESTAMP}.jpg" https://www.observatorioremoto.com/emadato/IPcam3.jpg
+            FILE_SIZE=$(stat -c%s "image_${TIMESTAMP}.jpg")
+
+            if [ $FILE_SIZE -ge 81920 ]; then
+              SUCCESS=true
+              break
+            else
+              echo "Downloaded image is less than 80kB, retrying..."
+              rm "image_${TIMESTAMP}.jpg"
+              RETRY_COUNT=$((RETRY_COUNT + 1))
+            fi
+          done
+
+          if [ "$SUCCESS" = false ]; then
+            echo "Failed to download a valid image after $MAX_RETRIES attempts."
+            exit 1
+          fi
 
       # Step 3: Commit and push the renamed image
       - name: Commit and push image
@@ -28,3 +49,4 @@ jobs:
           git add images/
           git commit -m "Add image downloaded at $TIMESTAMP"
           git push
+
